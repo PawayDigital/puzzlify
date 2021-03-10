@@ -14,6 +14,7 @@ export default new Vuetify({
         primary: "#EDEEF7",
         secondary: "#B8B5FF",
         textTitle: "#7868E6",
+        textImages: "#1D3E53",
         text: "#476D7C",
         bgTarget: "#F5F5F5",
         search: "#FDFDFD",

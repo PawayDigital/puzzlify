@@ -3,15 +3,17 @@
     <v-app-bar app color="secondary" dark>
       <v-container class="d-flex display-name">
         <div class="d-flex align-center">
-          <v-img
-            alt="Vuetify Logo"
-            class="shrink mr-2"
-            contain
-            src="@/assets/logo.svg"
-            transition="scale-transition"
-            width="198"
-            height="35"
-          />
+          <router-link to="/">
+            <v-img
+              alt="Vuetify Logo"
+              class="shrink mr-2"
+              contain
+              src="@/assets/logo.svg"
+              transition="scale-transition"
+              width="198"
+              height="35"
+            />
+          </router-link>
         </div>
 
         <v-spacer></v-spacer>
@@ -43,7 +45,7 @@
               class="mx-auto secondary mt-2"
             >
               <div class="text-center">
-                <router-link to="/about">
+                <router-link to="/profile">
                   <v-btn class="my-2 text--secondary" color="primary"
                     >perfil</v-btn
                   >

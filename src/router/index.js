@@ -13,6 +13,16 @@ const routes = [
     name: "Profile",
     component: () => import("@/pages/Profile/pages/Profile.vue"),
   },
+  {
+    path: "/register",
+    name: "Register",
+    component: () => import("@/pages/Auth/pages/Register.vue"),
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("@/pages/Auth/pages/Login.vue"),
+  },
 ];
 
 const router = new VueRouter({

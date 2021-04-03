@@ -18,7 +18,10 @@
 
         <v-spacer></v-spacer>
 
-        <div class="shrink">
+        <v-btn color="categories" class="mr-2">Registrarse</v-btn>
+        <v-btn color="textTitle">Inicio de sesion</v-btn>
+
+        <!-- <div class="shrink">
           <div
             @click="expand = !expand"
             :class="[expand ? 'margin_header' : '']"
@@ -56,7 +59,7 @@
               </div>
             </v-card>
           </v-expand-transition>
-        </div>
+        </div> -->
       </v-container>
     </v-app-bar>
   </div>

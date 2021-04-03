@@ -33,15 +33,29 @@
           </v-col>
           <v-col cols="12" sm="4">
             <div class="d-flex justify-center">
-              <v-btn rounded color="secondary" class="categories--text mr-2"
-                >Editar perfil</v-btn
-              >
-              <v-btn rounded color="textTitle" text>
-                Subir foto
-                <v-icon right>
-                  file_upload
-                </v-icon>
-              </v-btn>
+              <router-link to="/edit" class="text-decoration-none">
+                <v-btn rounded color="secondary" class="categories--text mr-2"
+                  >Editar perfil</v-btn
+                >
+              </router-link>
+              <v-dialog v-model="dialog" width="500">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    rounded
+                    color="textTitle"
+                    text
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    Subir foto
+                    <v-icon right>
+                      file_upload
+                    </v-icon>
+                  </v-btn>
+                </template>
+
+                <modal />
+              </v-dialog>
             </div>
           </v-col>
           <v-col cols="12" sm="12">
@@ -60,10 +74,12 @@
 </template>
 
 <script>
+import Modal from "@/pages/Profile/components/Modal.vue";
 export default {
   data() {
     return {
       tab: null,
+      dialog: false,
       items: [
         { id: 1, title: "All" },
         { id: 2, title: "Technology" },
@@ -75,6 +91,9 @@ export default {
         { id: 8, title: "Music" },
       ],
     };
+  },
+  components: {
+    Modal,
   },
 };
 </script>

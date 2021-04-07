@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import HeaderComponet from "@/layout/HeaderComponet.vue";
-import Tab from "@/layout/Tab.vue";
+import HeaderComponet from "@/pages/layout/HeaderComponet.vue";
+import Tab from "@/pages/layout/Tab.vue";
 import Images from "@/pages/Home/components/Images.vue";
 export default {
   components: {

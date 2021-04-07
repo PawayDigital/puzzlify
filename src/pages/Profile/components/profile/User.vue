@@ -59,14 +59,8 @@
             </div>
           </v-col>
           <v-col cols="12" sm="12">
-            <v-card>
-              <v-tabs center-active background-color="secondary">
-                <v-tab v-for="i of items" :key="i.id" class="text-center">
-                  {{ i.title }}
-                </v-tab>
-              </v-tabs>
-            </v-card></v-col
-          >
+            <v-card> <Tabs /> </v-card
+          ></v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -74,37 +68,19 @@
 </template>
 
 <script>
-import Modal from "@/pages/Profile/components/Modal.vue";
+import Modal from "@/pages/Profile/components/forms/Modal.vue";
+import Tabs from "@/pages/Profile/components/profile/tabs.vue";
 export default {
   data() {
     return {
-      tab: null,
       dialog: false,
-      items: [
-        { id: 1, title: "All" },
-        { id: 2, title: "Technology" },
-        { id: 3, title: "Nature" },
-        { id: 4, title: "Sports" },
-        { id: 5, title: "Movies" },
-        { id: 6, title: "Fashion" },
-        { id: 7, title: "People" },
-        { id: 8, title: "Music" },
-      ],
     };
   },
   components: {
     Modal,
+    Tabs,
   },
 };
 </script>
 
-<style>
-.v-slide-group__content {
-  justify-content: center;
-}
-@media screen and (max-width: 411px) {
-  .center-perfil {
-    text-align: center;
-  }
-}
-</style>
+<style src="@/pages/Profile/css/profile.css"></style>

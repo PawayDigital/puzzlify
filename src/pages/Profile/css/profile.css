@@ -1,0 +1,23 @@
+/* component user */
+.v-slide-group__content {
+  justify-content: center;
+}
+@media screen and (max-width: 411px) {
+  .center-perfil {
+    text-align: center;
+  }
+}
+/* ------------ */
+
+/* component modal */
+.theme--light.v-list {
+  background: #edeef7 !important;
+}
+.v-application .primary--text {
+  color: #1d3e53 !important;
+  caret-color: #1d3e53 !important;
+}
+.theme--light.v-btn.btnPublicar {
+  color: #edeef7 !important;
+}
+/* ------------ */

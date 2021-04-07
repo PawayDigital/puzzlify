@@ -18,8 +18,12 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn color="categories" class="mr-2">Registrarse</v-btn>
-        <v-btn color="textTitle">Inicio de sesion</v-btn>
+        <router-link to="/register" class="text-decoration-none">
+          <v-btn color="categories" class="mr-2">Registrarse</v-btn>
+        </router-link>
+        <router-link to="/login" class="text-decoration-none">
+          <v-btn color="textTitle">Inicio de sesion</v-btn>
+        </router-link>
 
         <!-- <div class="shrink">
           <div

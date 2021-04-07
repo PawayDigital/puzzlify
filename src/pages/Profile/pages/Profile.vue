@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import HeaderComponet from "@/layout/HeaderComponet.vue";
-import User from "../components/User.vue";
-import Images from "../../Home/components/Images.vue";
+import HeaderComponet from "@/pages/layout/HeaderComponet.vue";
+import User from "@/pages/Profile/components/profile/User.vue";
+import Images from "@/pages/Home/components/Images.vue";
 export default {
   components: { User, HeaderComponet, Images },
 };

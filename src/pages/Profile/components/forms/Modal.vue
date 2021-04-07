@@ -1,6 +1,6 @@
 <template>
   <v-card class="primary">
-    <v-card-title class="headline">
+    <v-card-title class="headline text--textTitle">
       Subir foto
     </v-card-title>
 
@@ -8,17 +8,33 @@
       <v-form>
         <v-container>
           <v-row>
-            <v-col cols="12" md="12">
-              <img :src="image" id="image" width="200" alt="tu imagen" />
+            <v-col cols="12" md="12" class="text-center">
+              <img
+                :src="image"
+                id="image"
+                width="50%"
+                height="auto"
+                alt="upload"
+                class="text--secondary"
+              />
               <br />
-              <v-btn @click="hola">Subir foto</v-btn>
-              <input id="file" type="file" hidden @change="previewFiles" />
+              <v-btn @click="uploadImage" block text color="textTitle"
+                >Subir foto</v-btn
+              >
+              <input
+                id="file"
+                type="file"
+                hidden
+                @change="previewFiles"
+                required
+              />
             </v-col>
             <v-col cols="12" md="12">
               <v-text-field
                 :counter="10"
                 label="Nombre de la foto"
                 required
+                color="textTitle"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="12">
@@ -29,11 +45,13 @@
                 label="Categoria-s"
                 multiple
                 solo
-                class=""
+                background-color="primary"
+                color="textImages"
               ></v-select>
             </v-col>
             <v-col cols="12" md="12" class="d-flex justify-md-end">
-              <v-btn>Publicar</v-btn>
+              <v-btn color="error" text class="mr-3">Cancelar</v-btn>
+              <v-btn color="textTitle" class="btnPublicar">Publicar</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -47,13 +65,14 @@
 <script>
 export default {
   data: () => ({
-    image: "https://via.placeholder.com/150",
+    image:
+      "https://res.cloudinary.com/dlgvxohur/image/upload/v1617829433/utils/xrz3x7mvtcghtxkihqmg.svg",
     items: ["foo", "bar", "fizz", "buzz"],
     value: [],
     url: null,
   }),
   methods: {
-    hola() {
+    uploadImage() {
       document.getElementById("file").click();
     },
     previewFiles(e) {

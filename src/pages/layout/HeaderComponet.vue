@@ -1,6 +1,6 @@
 <template>
   <div id="header">
-    <v-app-bar app color="secondary" dark>
+    <v-app-bar app color="secondary">
       <v-container class="d-flex display-name">
         <div class="d-flex align-center">
           <router-link to="/">
@@ -17,13 +17,19 @@
         </div>
 
         <v-spacer></v-spacer>
+        <div class="btn-header">
+          <router-link to="/register" class="text-decoration-none">
+            <v-btn color="categories" class="btn mr-2">Registrarse</v-btn>
+          </router-link>
+          <router-link to="/login" class="text-decoration-none">
+            <v-btn color="textTitle" class="btn">Inicio de sesion</v-btn>
+          </router-link>
+        </div>
 
-        <router-link to="/register" class="text-decoration-none">
-          <v-btn color="categories" class="mr-2">Registrarse</v-btn>
-        </router-link>
-        <router-link to="/login" class="text-decoration-none">
-          <v-btn color="textTitle">Inicio de sesion</v-btn>
-        </router-link>
+        <v-app-bar-nav-icon
+          color="primary"
+          @click="drawer = true"
+        ></v-app-bar-nav-icon>
 
         <!-- <div class="shrink">
           <div
@@ -66,6 +72,22 @@
         </div> -->
       </v-container>
     </v-app-bar>
+    <v-navigation-drawer v-model="drawer" color="secondary" absolute temporary>
+      <v-container>
+        <v-row style="height:100vh" align-content="center" justify="center">
+          <router-link to="/register" class="text-decoration-none">
+            <v-btn color="primary" class="btn-responsive mb-7"
+              >Registrarse</v-btn
+            >
+          </router-link>
+          <router-link to="/login" class="text-decoration-none">
+            <v-btn color="primary" class="btn-responsive "
+              >Inicio de sesion</v-btn
+            >
+          </router-link>
+        </v-row>
+      </v-container>
+    </v-navigation-drawer>
   </div>
 </template>
 
@@ -73,28 +95,9 @@
 export default {
   data: () => ({
     expand: false,
+    drawer: false,
   }),
 };
 </script>
 
-<style>
-.margin_header {
-  margin-top: 7em;
-}
-.cursor {
-  cursor: pointer;
-}
-.texto-primary {
-  color: #edeef7;
-}
-.v-sheet.v-app-bar.v-toolbar:not(.v-sheet--outlined) {
-  box-shadow: 0px 6px 4px rgba(184, 181, 255, 0.25) !important;
-}
-
-@media screen and (max-width: 411px) {
-  .display-name {
-    display: none;
-    padding: 0 !important;
-  }
-}
-</style>
+<style src="@/pages/layout/css/layout.css"></style>

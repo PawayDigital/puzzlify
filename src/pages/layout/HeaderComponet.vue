@@ -17,21 +17,21 @@
         </div>
 
         <v-spacer></v-spacer>
-        <div class="btn-header">
+        <!-- <div class="btn-header">
           <router-link to="/register" class="text-decoration-none">
             <v-btn color="categories" class="btn mr-2">Registrarse</v-btn>
           </router-link>
           <router-link to="/login" class="text-decoration-none">
             <v-btn color="textTitle" class="btn">Inicio de sesion</v-btn>
           </router-link>
-        </div>
+        </div> -->
 
         <v-app-bar-nav-icon
           color="primary"
           @click="drawer = true"
         ></v-app-bar-nav-icon>
 
-        <!-- <div class="shrink">
+        <div class="shrink">
           <div
             @click="expand = !expand"
             :class="[expand ? 'margin_header' : '']"
@@ -43,10 +43,11 @@
                 src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
               />
             </v-avatar>
-            <span class="mr-1 font-weight-bold display-name texto-primary"
+            <span
+              class="text-user mr-1 font-weight-bold display-name primary--text"
               >Mike van Y</span
             >
-            <v-icon color="primary">
+            <v-icon class="text-user" color="primary">
               keyboard_arrow_down
             </v-icon>
           </div>
@@ -69,7 +70,7 @@
               </div>
             </v-card>
           </v-expand-transition>
-        </div> -->
+        </div>
       </v-container>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" color="secondary" absolute temporary>

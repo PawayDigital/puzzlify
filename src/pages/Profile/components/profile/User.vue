@@ -38,24 +38,8 @@
                   >Editar perfil</v-btn
                 >
               </router-link>
-              <v-dialog v-model="dialog" width="500">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    rounded
-                    color="textTitle"
-                    text
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    Subir foto
-                    <v-icon right>
-                      file_upload
-                    </v-icon>
-                  </v-btn>
-                </template>
 
-                <modal />
-              </v-dialog>
+              <modal />
             </div>
           </v-col>
           <v-col cols="12" sm="12">
@@ -71,11 +55,6 @@
 import Modal from "@/pages/Profile/components/forms/Modal.vue";
 import Tabs from "@/pages/Profile/components/profile/tabs.vue";
 export default {
-  data() {
-    return {
-      dialog: false,
-    };
-  },
   components: {
     Modal,
     Tabs,

@@ -19,6 +19,7 @@
               type="file"
               hidden
               @change="previewFiles"
+              accept="image/png, image/jpg, image/jpeg"
               required
             />
           </v-col>
@@ -121,7 +122,8 @@ export default {
       ],
       passwordRules: [
         (v) => !!v || "La contraseña es requerida",
-        (v) => (v && v.length <= 10) || "Name must be less than 6 characters",
+        (v) =>
+          (v && v.length >= 8) || "La contraseña debe ser mayor a 8 caracteres",
       ],
 
       nameRules: [

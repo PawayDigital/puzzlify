@@ -50,7 +50,8 @@ export default {
 
     passwordRules: [
       (v) => !!v || "La contraseña es requerida",
-      (v) => (v && v.length <= 10) || "Name must be less than 6 characters",
+      (v) =>
+        (v && v.length >= 8) || "La contraseña debe ser mayor a 8 caracteres",
     ],
     emailRules: [
       (v) => !!v || "El correo es requerido",

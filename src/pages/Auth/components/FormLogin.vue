@@ -7,10 +7,12 @@
         >Registrate</router-link
       >
     </span>
-    <v-form>
+    <v-form @submit.prevent="login" ref="form" v-model="valid" lazy-validation>
       <v-row>
         <v-col cols="12" sm="8" md="12" class="pb-0">
           <v-text-field
+            v-model="email"
+            :rules="emailRules"
             label="Correo"
             color="textTitle"
             type="email"
@@ -19,6 +21,8 @@
         </v-col>
         <v-col cols="12" sm="8" md="12">
           <v-text-field
+            v-model="password"
+            :rules="passwordRules"
             label="Contraseña"
             type="password"
             color="textTitle"
@@ -38,5 +42,29 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data: () => ({
+    valid: true,
+    email: "",
+    password: "",
+
+    passwordRules: [
+      (v) => !!v || "La contraseña es requerida",
+      (v) => (v && v.length <= 10) || "Name must be less than 6 characters",
+    ],
+    emailRules: [
+      (v) => !!v || "El correo es requerido",
+      (v) => /.+@.+\..+/.test(v) || "No es un correo valido",
+    ],
+  }),
+  methods: {
+    login() {
+      if (this.$refs.form.validate()) {
+        console.log("hola login");
+      } else {
+        console.error("validar");
+      }
+    },
+  },
+};
 </script>

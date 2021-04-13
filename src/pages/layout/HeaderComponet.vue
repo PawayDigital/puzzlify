@@ -26,10 +26,10 @@
           </router-link>
         </div> -->
 
-        <v-app-bar-nav-icon
-          color="primary"
+        <!-- <v-app-bar-nav-icon
+          color="whitee"
           @click="drawer = true"
-        ></v-app-bar-nav-icon>
+        ></v-app-bar-nav-icon> -->
 
         <div class="shrink">
           <div
@@ -44,10 +44,10 @@
               />
             </v-avatar>
             <span
-              class="text-user mr-1 font-weight-bold display-name primary--text"
+              class="text-user mr-1 font-weight-bold display-name whitee--text"
               >Mike van Y</span
             >
-            <v-icon class="text-user" color="primary">
+            <v-icon class="text-user" color="whitee">
               keyboard_arrow_down
             </v-icon>
           </div>

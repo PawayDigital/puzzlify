@@ -13,128 +13,62 @@
       v-model="valid"
       lazy-validation
     >
-      <v-row>
-        <v-col cols="12" sm="8" md="6" class="pb-0">
-          <v-text-field
-            label="Nombres"
-            v-model="name"
-            :counter="12"
-            :rules="nameRules"
-            color="textTitle"
-            type="text"
-            required
-          >
-          </v-text-field>
-        </v-col>
-        <v-col cols="12" sm="8" md="6" class="pb-0">
-          <v-text-field
-            v-model="lastname"
-            :counter="12"
-            :rules="lastnameRules"
-            label="Apellidos"
-            color="textTitle"
-            type="text"
-            required
-          >
-          </v-text-field>
-        </v-col>
-        <v-col cols="12" sm="8" md="12" class="pb-0">
-          <v-text-field
-            v-model="email"
-            :rules="emailRules"
-            label="Correo"
-            color="textTitle"
-            type="email"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="8" md="12" class="pb-0">
-          <v-text-field
-            label="Usuario"
-            v-model="username"
-            :counter="11"
-            :rules="usernameRules"
-            color="textTitle"
-            type="text"
-            required
-          >
-          </v-text-field>
-        </v-col>
-        <v-col cols="12" sm="8" md="12">
-          <v-text-field
-            v-model="password"
-            :rules="passwordRules"
-            label="Contraseña"
-            color="textTitle"
-            type="password"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="8" md="12">
-          <v-checkbox
-            v-model="checkbox"
-            :rules="[(v) => !!v || 'Debes aceptar para continuar']"
-            label="Terminos y condiciones"
-            color="textTitle"
-            required
-          ></v-checkbox>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" sm="8" md="12">
-          <v-btn type="submit" large block color="textTitle">
-            Registrarse
-          </v-btn>
-        </v-col>
-      </v-row>
+      <Input :user="user" />
+      <v-progress-circular
+        indeterminate
+        v-if="loaded"
+        size="25"
+        class="mt-2"
+        color="textTitle"
+      ></v-progress-circular>
     </v-form>
   </v-col>
 </template>
 
 <script>
+import AuthService from "@/pages/Auth/services/auth.service.js";
+import swal from "sweetalert2";
+import Input from "./Input.vue";
+
 export default {
+  components: { Input },
   data: () => ({
     valid: true,
-    name: "",
-    email: "",
-    lastname: "",
-    username: "",
-    password: "",
-    checkbox: false,
-
-    lastnameRules: [
-      (v) => !!v || "El apellido es requerido",
-      (v) =>
-        (v && v.length <= 12) || "El apellido no debe pasar los 12 caracteres",
-    ],
-    usernameRules: [
-      (v) => !!v || "El usuario es requerido",
-      (v) =>
-        (v && v.length <= 11) || "El usuario no debe pasar los 11 caracteres",
-    ],
-    passwordRules: [
-      (v) => !!v || "La contraseña es requerida",
-      (v) =>
-        (v && v.length >= 8) || "La contraseña debe ser mayor a 8 caracteres",
-    ],
-
-    nameRules: [
-      (v) => !!v || "El nombre es requerido",
-      (v) =>
-        (v && v.length <= 12) || "El nombre no debe pasar los 12 caracteres",
-    ],
-    emailRules: [
-      (v) => !!v || "El correo es requerido",
-      (v) => /.+@.+\..+/.test(v) || "No es un correo valido",
-    ],
+    loaded: false,
+    user: {
+      email: "",
+      username: "",
+      password: "",
+    },
   }),
   methods: {
     register() {
       if (this.$refs.form.validate()) {
-        console.log("hola register");
+        this.loaded = true;
+        AuthService.register({
+          username: this.user.username,
+          email: this.user.email,
+          password: this.user.password,
+        }).then((res) => {
+          this.loaded = false;
+          this.user = {
+            email: "",
+            username: "",
+            password: "",
+          };
+          this.upload(res.user.id);
+          this.$router.push("/login");
+        });
       } else {
-        console.error("validar");
+        swal.fire("Error", "tienes que rellenar los campos", "error");
       }
+    },
+    upload(id) {
+      let formData = new FormData();
+
+      formData.append("files.image", "");
+      formData.append("data", JSON.stringify({ user: id }));
+      AuthService.registerUpload(formData).then((res) => {});
     },
   },
 };

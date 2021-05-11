@@ -17,11 +17,17 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: () => import("@/pages/Profile/pages/Profile.vue"),
+    meta: {
+      auth: true,
+    },
   },
   {
     path: "/edit",
     name: "Edit",
     component: () => import("@/pages/Profile/pages/Edit.vue"),
+    meta: {
+      auth: true,
+    },
   },
   {
     path: "/register",
@@ -39,6 +45,16 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.auth)) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      next("login");
+    }
+  }
+  next();
 });
 
 export default router;

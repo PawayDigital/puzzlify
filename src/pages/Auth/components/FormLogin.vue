@@ -8,62 +8,51 @@
       >
     </span>
     <v-form @submit.prevent="login" ref="form" v-model="valid" lazy-validation>
-      <v-row>
-        <v-col cols="12" sm="8" md="12" class="pb-0">
-          <v-text-field
-            v-model="email"
-            :rules="emailRules"
-            label="Correo"
-            color="textTitle"
-            type="email"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="8" md="12">
-          <v-text-field
-            v-model="password"
-            :rules="passwordRules"
-            label="Contraseña"
-            type="password"
-            color="textTitle"
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" sm="8" md="12">
-          <v-btn type="submit" large block color="textTitle">
-            Ingresar
-          </v-btn>
-        </v-col>
-      </v-row>
+      <Input :user="user" />
+      <v-progress-circular
+        indeterminate
+        v-if="loaded"
+        size="25"
+        class="mt-2"
+        color="textTitle"
+      ></v-progress-circular>
     </v-form>
   </v-col>
 </template>
 
 <script>
+import AuthService from "@/pages/Auth/services/auth.service.js";
+import Input from "./Input.vue";
+import swal from "sweetalert2";
 export default {
+  components: { Input },
   data: () => ({
     valid: true,
-    email: "",
-    password: "",
-
-    passwordRules: [
-      (v) => !!v || "La contraseña es requerida",
-      (v) =>
-        (v && v.length >= 8) || "La contraseña debe ser mayor a 8 caracteres",
-    ],
-    emailRules: [
-      (v) => !!v || "El correo es requerido",
-      (v) => /.+@.+\..+/.test(v) || "No es un correo valido",
-    ],
+    loaded: false,
+    user: {
+      email: "",
+      password: "",
+    },
   }),
   methods: {
     login() {
       if (this.$refs.form.validate()) {
-        console.log("hola login");
+        this.loaded = true;
+        AuthService.login({
+          identifier: this.user.email,
+          password: this.user.password,
+        }).then((res) => {
+          this.loaded = false;
+          localStorage.setItem("token", res.jwt);
+          localStorage.setItem("user", JSON.stringify(res.user));
+          this.user = {
+            email: "",
+            password: "",
+          };
+          this.$router.push("/profile");
+        });
       } else {
-        console.error("validar");
+        swal.fire("Error", "tienes que rellenar los campos", "error");
       }
     },
   },

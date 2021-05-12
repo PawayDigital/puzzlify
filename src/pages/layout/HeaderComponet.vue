@@ -26,12 +26,12 @@
           </router-link>
         </div> -->
 
-        <!-- <v-app-bar-nav-icon
+        <v-app-bar-nav-icon
           color="whitee"
           @click="drawer = true"
-        ></v-app-bar-nav-icon> -->
+        ></v-app-bar-nav-icon>
 
-        <div class="shrink">
+        <div class="shrink user">
           <div
             @click="expand = !expand"
             :class="[expand ? 'margin_header' : '']"

@@ -47,6 +47,9 @@ import imagesLoaded from "imagesloaded";
 import masonry from "masonry-layout";
 import Modal from "./Modal.vue";
 export default {
+  props: {
+    images: Array,
+  },
   data() {
     return {
       dialog: false,

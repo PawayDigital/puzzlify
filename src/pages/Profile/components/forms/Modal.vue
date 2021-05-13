@@ -53,7 +53,9 @@
                 <v-select
                   v-model="categories"
                   :items="items"
-                  :rules="[(v) => !!v || 'Item is required']"
+                  item-text="name"
+                  item-value="_id"
+                  :rules="[(v) => !!v || 'la categoria es requerida']"
                   chips
                   label="Categoria-s"
                   multiple
@@ -71,8 +73,15 @@
                   :disabled="!valid"
                   color="textTitle"
                   class="btnPublicar"
-                  >Publicar</v-btn
-                >
+                  >Publicar
+                  <v-progress-circular
+                    indeterminate
+                    v-if="loaded"
+                    size="20"
+                    class="ml-2"
+                    color="white"
+                  ></v-progress-circular
+                ></v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -85,13 +94,16 @@
 </template>
 
 <script>
+import LayoutService from "@/pages/layout/services/layout.service.js";
+import ProfileService from "../../services/profile.service.js";
 export default {
   data() {
     return {
       dialog: false,
+      loaded: false,
       image:
         "https://res.cloudinary.com/dlgvxohur/image/upload/v1618259197/utils/sb1tme4xc3oz5pmcfvhy.svg",
-      items: ["Technology", "Nature", "Sports", "Movies"],
+      items: [],
       url: null,
       name: "",
       categories: [],
@@ -105,6 +117,9 @@ export default {
       ],
     };
   },
+  created() {
+    this.getTags();
+  },
   methods: {
     uploadImage() {
       document.getElementById("file").click();
@@ -113,8 +128,42 @@ export default {
       this.image = URL.createObjectURL(e.target.files[0]);
       this.url = e.target.files[0];
     },
+    getTags() {
+      LayoutService.getTags().then((res) => {
+        this.items = res;
+      });
+    },
     upload() {
-      console.log("ass");
+      this.loaded = true;
+
+      let tags = [],
+        user = JSON.parse(localStorage.getItem("user")).id,
+        formData = new FormData();
+
+      this.categories.forEach((el) => {
+        tags.push({ _id: el });
+      });
+
+      formData.append("files.url", this.url);
+      formData.append(
+        "data",
+        JSON.stringify({
+          title: this.name,
+          tags,
+          user,
+        })
+      );
+
+      ProfileService.postImage(formData).then((res) => {
+        this.loaded = false;
+        if (res) {
+          this.image =
+            "https://res.cloudinary.com/dlgvxohur/image/upload/v1618259197/utils/sb1tme4xc3oz5pmcfvhy.svg";
+          this.name = "";
+          this.categories = 0;
+          this.dialog = false;
+        }
+      });
     },
   },
 };

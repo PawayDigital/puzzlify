@@ -41,4 +41,26 @@ export default new (class ProfileService {
       );
     }
   }
+
+  async postImage(data) {
+    try {
+      const options = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+        res = await axios.post(`${RUTA_API}/imagenes/`, data, options);
+      if (res.status === 200) {
+        swal.fire("subida!", "tu imagen se ha subido!", "success");
+      }
+      return res.data;
+    } catch (err) {
+      swal.fire(
+        `Ha ocurrido un ${err.response.status} en tu intento de subir la imagen`,
+        err.response.statusText,
+        "error"
+      );
+    }
+  }
 })();

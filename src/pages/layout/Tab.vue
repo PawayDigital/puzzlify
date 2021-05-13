@@ -2,8 +2,8 @@
   <v-card>
     <v-tabs v-model="tab" background-color="primary" centered icons-and-text>
       <v-tabs-slider></v-tabs-slider>
-      <v-tab href="#" v-for="item in items" :key="item.id">
-        {{ item.title }}
+      <v-tab href="#" v-for="item in tabs" :key="item.id">
+        {{ item.name }}
         <v-icon>{{ item.icon }}</v-icon>
       </v-tab>
     </v-tabs>
@@ -11,21 +11,25 @@
 </template>
 
 <script>
+import LayoutService from "./services/layout.service.js";
 export default {
   data() {
     return {
       tab: null,
-      items: [
-        { title: "All", icon: "image" },
-        { title: "Technology", icon: "computer" },
-        { title: "Nature", icon: "eco" },
-        { title: "Sports", icon: "emoji_events" },
-        { title: "Movies", icon: "theaters" },
-        { title: "Fashion", icon: "shopping_basket" },
-        { title: "People", icon: "supervised_user_circle" },
-        { title: "Music", icon: "speaker" },
-      ],
+      tabs: [{ name: "All", icon: "image" }],
     };
+  },
+  created() {
+    this.getTags();
+  },
+  methods: {
+    getTags() {
+      LayoutService.getTags().then((res) => {
+        for (const el of res) {
+          this.tabs.push(el);
+        }
+      });
+    },
   },
 };
 </script>

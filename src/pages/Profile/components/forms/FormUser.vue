@@ -1,155 +1,77 @@
 <template>
   <v-container class="mt-16">
     <v-form @submit.prevent="update" ref="form" v-model="valid" lazy-validation>
-      <v-container>
-        <v-row>
-          <v-col cols="12" md="6" class="text-center">
-            <img
-              :src="image"
-              alt=""
-              class="rounded-circle"
-              width="200"
-              height="200"
-            />
-            <v-btn @click="uploadImage" block text color="textTitle"
-              >Actualizar foto</v-btn
-            >
-            <input
-              id="file"
-              type="file"
-              hidden
-              @change="previewFiles"
-              accept="image/png, image/jpg, image/jpeg"
-              required
-            />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="name"
-              :counter="12"
-              :rules="nameRules"
-              type="text"
-              color="textTitle"
-              label="Nombres"
-              required
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="lastname"
-              :counter="12"
-              :rules="lastnameRules"
-              type="text"
-              color="textTitle"
-              label="Apellidos"
-              required
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="username"
-              :counter="11"
-              :rules="usernameRules"
-              type="text"
-              color="textTitle"
-              label="@usuario"
-              required
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="email"
-              :rules="emailRules"
-              label="E-mail"
-              color="textTitle"
-              type="email"
-              required
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="password"
-              :rules="passwordRules"
-              label="Contraseña"
-              type="password"
-              color="textTitle"
-              required
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="12">
-            <v-textarea
-              solo
-              name="input-7-4"
-              background-color="primary"
-              color="textTitle"
-              label="Descripcion"
-            ></v-textarea>
-          </v-col>
-          <v-col cols="12" md="12" class="d-flex justify-md-end">
-            <v-btn type="submit" color="textTitle" class="btnPublicar">
-              Actualizar informacion
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
+      <Inputs :info="info" :loaded="loaded" />
     </v-form>
   </v-container>
 </template>
 
 <script>
+import Inputs from "./Inputs";
+import RUTA_API from "@/env.js";
+import swal from "sweetalert2";
+import ProfileService from "../../services/profile.service.js";
 export default {
+  components: { Inputs },
   data() {
     return {
-      image: "https://avatars0.githubusercontent.com/u/9064066?v=4&s=460",
-      url: null,
       valid: true,
-      name: "",
-      email: "",
-      lastname: "",
-      username: "",
-      password: "",
-
-      lastnameRules: [
-        (v) => !!v || "El apellido es requerido",
-        (v) =>
-          (v && v.length <= 12) ||
-          "El apellido no debe pasar los 12 caracteres",
-      ],
-      usernameRules: [
-        (v) => !!v || "El usuario es requerido",
-        (v) =>
-          (v && v.length <= 11) || "El usuario no debe pasar los 11 caracteres",
-      ],
-      passwordRules: [
-        (v) => !!v || "La contraseña es requerida",
-        (v) =>
-          (v && v.length >= 8) || "La contraseña debe ser mayor a 8 caracteres",
-      ],
-
-      nameRules: [
-        (v) => !!v || "El nombre es requerido",
-        (v) =>
-          (v && v.length <= 12) || "El nombre no debe pasar los 12 caracteres",
-      ],
-      emailRules: [
-        (v) => !!v || "El correo es requerido",
-        (v) => /.+@.+\..+/.test(v) || "No es un correo valido",
-      ],
+      loaded: false,
+      id_photo: null,
+      info: {
+        image: "",
+        url: null,
+        name: "",
+        email: "",
+        lastname: "",
+        username: "",
+        password: "",
+      },
     };
   },
+  created() {
+    this.getUsuario();
+  },
   methods: {
-    uploadImage() {
-      document.getElementById("file").click();
-    },
-    previewFiles(e) {
-      this.image = URL.createObjectURL(e.target.files[0]);
-      this.url = e.target.files[0];
+    getUsuario() {
+      ProfileService.getUser().then((user) => {
+        this.info = {
+          image: user.photos_user.image
+            ? `${RUTA_API}${user.photos_user.image.url}`
+            : "https://ti-unterrichtsmaterialien.net/fileadmin/user_upload/ti-default.jpg",
+          name: user.firstname ? user.firstname : "",
+          lastname: user.lastname ? user.lastname : "",
+          username: user.username,
+          email: user.email,
+        };
+        this.id_photo = user.photos_user.id;
+      });
     },
     update() {
+      this.loaded = true;
+
+      let formData = new FormData();
+
+      formData.append("files.image", this.info.url);
+      formData.append("data", JSON.stringify({}));
+
       if (this.$refs.form.validate()) {
-        console.log("hola update");
+        ProfileService.updateUser({
+          username: this.info.username,
+          email: this.info.email,
+          password: this.info.password,
+          firstname: this.info.name,
+          lastname: this.info.lastname,
+        }).then((res) => {
+          if (this.info.url !== undefined) {
+            ProfileService.updatePhoto(formData, this.id_photo).then((res) => {
+              return (this.loaded = false);
+            });
+          }
+          return (this.loaded = false);
+        });
       } else {
-        console.error("validar");
+        swal.fire(`Error`, "debes llenar los campos que se indicar", "error");
       }
     },
   },

@@ -63,4 +63,72 @@ export default new (class ProfileService {
       );
     }
   }
+
+  async getUser() {
+    try {
+      const options = {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+        res = await axios.get(
+          `${RUTA_API}/users/${JSON.parse(localStorage.getItem("user")).id}`,
+          options
+        );
+
+      return res.data;
+    } catch (err) {
+      swal.fire(
+        `Ha ocurrido un ${err.response.status} con la informacion del usuario`,
+        err.response.statusText,
+        "error"
+      );
+    }
+  }
+
+  async updatePhoto(data, id) {
+    try {
+      const options = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+        res = await axios.put(`${RUTA_API}/foto-users/${id}`, data, options);
+
+      return res.data;
+    } catch (err) {
+      swal.fire(
+        `Ha ocurrido un ${err.response.status} en la actualizacion de datos`,
+        err.response.statusText,
+        "error"
+      );
+    }
+  }
+
+  async updateUser(data) {
+    try {
+      const options = {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+        res = await axios.put(
+          `${RUTA_API}/users/${JSON.parse(localStorage.getItem("user")).id}`,
+          data,
+          options
+        );
+      if (res.status === 200) {
+        swal.fire("Actualizado!", "tus datos se han actualizado!", "success");
+      }
+      return res.data;
+    } catch (err) {
+      swal.fire(
+        `Ha ocurrido un ${err.response.status} en la actualizacion de la foto`,
+        err.response.statusText,
+        "error"
+      );
+    }
+  }
 })();

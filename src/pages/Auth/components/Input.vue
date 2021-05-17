@@ -49,6 +49,13 @@
       <v-col cols="12" sm="8" md="12">
         <v-btn type="submit" large block color="textTitle">
           {{ btnName }}
+          <v-progress-circular
+            indeterminate
+            v-if="loaded"
+            size="25"
+            class="ml-2"
+            color="white"
+          ></v-progress-circular>
         </v-btn>
       </v-col>
     </v-row>
@@ -83,6 +90,7 @@ export default {
   },
   props: {
     user: Object,
+    loaded: Boolean,
   },
 };
 </script>

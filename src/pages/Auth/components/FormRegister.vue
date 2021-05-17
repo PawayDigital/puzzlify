@@ -13,14 +13,7 @@
       v-model="valid"
       lazy-validation
     >
-      <Input :user="user" />
-      <v-progress-circular
-        indeterminate
-        v-if="loaded"
-        size="25"
-        class="mt-2"
-        color="textTitle"
-      ></v-progress-circular>
+      <Input :user="user" :loaded="loaded" />
     </v-form>
   </v-col>
 </template>

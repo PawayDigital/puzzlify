@@ -29,4 +29,18 @@ export default new (class LayoutService {
       );
     }
   }
+
+  async oneImage(id) {
+    try {
+      const res = await axios.get(`${RUTA_API}/imagenes/${id}`);
+
+      return res.data;
+    } catch (err) {
+      swal.fire(
+        `Ha ocurrido un ${err.response.status} con la imagen que quieres mostrar`,
+        err.response.statusText,
+        "error"
+      );
+    }
+  }
 })();

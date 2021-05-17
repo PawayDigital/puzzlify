@@ -1,11 +1,11 @@
 <template>
-  <div class="primary" style="width:100%;">
+  <div class="primary" style="width:100%; height:auto;">
     <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on, attrs }">
         <div class="grid mt-5">
           <v-card
             class="mx-auto text-center item mb-5"
-            v-for="item in imagesGlobal"
+            v-for="item in imagesHome"
             :key="item.id"
           >
             <img
@@ -14,6 +14,7 @@
               class="img"
               height="auto"
               v-bind="attrs"
+              @click="oneImage(item.url[0].url)"
               v-on="on"
               :alt="item.url[0].name"
             />
@@ -37,25 +38,26 @@
         </div>
       </template>
 
-      <modal />
+      <modal :id="idImage" />
     </v-dialog>
   </div>
 </template>
 
 <script>
 import LayoutService from "@/pages/layout/services/layout.service.js";
+import ProfileService from "@/pages/Profile/services/profile.service.js";
+
 import RUTA_API from "@/env.js";
 import imagesLoaded from "imagesloaded";
 import masonry from "masonry-layout";
 import Modal from "./Modal.vue";
 export default {
-  props: {
-    images: Array,
-  },
   data() {
     return {
       dialog: false,
       imagesGlobal: [],
+      idImage: null,
+      images: [],
     };
   },
   components: {
@@ -65,11 +67,21 @@ export default {
     urlImage() {
       return RUTA_API;
     },
+    imagesHome() {
+      return this.$route.path === "/profile" ? this.images : this.imagesGlobal;
+    },
+  },
+  mounted() {
+    this.getImages();
+    this.getImagesMe();
   },
   methods: {
-    getImages() {
-      LayoutService.getImages().then((res) => {
-        this.imagesGlobal = res;
+    oneImage(id) {
+      this.idImage = id;
+    },
+    getImagesMe() {
+      ProfileService.getImagesMe().then((res) => {
+        this.images = res;
         let elem = document.querySelector(".grid");
         imagesLoaded(elem, function() {
           new masonry(elem, {
@@ -81,9 +93,22 @@ export default {
         });
       });
     },
-  },
-  mounted() {
-    this.getImages();
+
+    getImages() {
+      LayoutService.getImages().then((res) => {
+        this.imagesGlobal = res;
+
+        let elem = document.querySelector(".grid");
+        imagesLoaded(elem, function() {
+          new masonry(elem, {
+            itemSelector: ".item",
+            columnWidth: 230,
+            gutter: 20,
+            isFitWidth: true,
+          });
+        });
+      });
+    },
   },
 };
 </script>

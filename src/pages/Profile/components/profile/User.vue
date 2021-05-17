@@ -43,7 +43,7 @@
         </v-row>
       </v-col>
     </v-row>
-    <images :images="images" />
+    <images />
   </v-container>
 </template>
 
@@ -60,7 +60,6 @@ export default {
       user: {},
       image: {},
       tags: [],
-      images: [],
     };
   },
   components: {
@@ -71,36 +70,32 @@ export default {
   created() {
     this.getUser();
     this.getTags();
-    this.getImagesMe();
   },
   computed: {
     getName() {
       return this.user.firstname || this.user.lastname;
     },
     getImage() {
-      return this.user.photos_user.image
+      return this.user.photos_user
         ? this.image
         : "https://ti-unterrichtsmaterialien.net/fileadmin/user_upload/ti-default.jpg";
     },
   },
   methods: {
-    getUser() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      this.user = user;
-
-      if (this.user.photos_user.image) {
-        this.image = `${RUTA_API}${this.user.photos_user.image.url}`;
-        return;
-      }
-    },
-    getTags() {
-      let tags_array = [{ id: 1, name: "All" }];
-      ProfileService.getTags(this.user.id, tags_array).then((res) => {
-        this.tags = [...new Set(res)];
+    async getUser() {
+      await ProfileService.getUser().then((user) => {
+        this.user = user;
+        if (this.user.photos_user) {
+          this.image = `${RUTA_API}${this.user.photos_user.image.url}`;
+        }
       });
     },
-    getImagesMe() {
-      ProfileService.getImagesMe().then((res) => (this.images = res));
+    getTags() {
+      let id_user = JSON.parse(localStorage.getItem("user")).id,
+        tags_array = [{ id: 1, name: "All" }];
+      ProfileService.getTags(id_user, tags_array).then((res) => {
+        this.tags = [...new Set(res)];
+      });
     },
   },
 };

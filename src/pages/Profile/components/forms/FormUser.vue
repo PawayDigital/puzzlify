@@ -68,6 +68,7 @@ export default {
               return (this.loaded = false);
             });
           }
+          this.$router.push("/profile");
           return (this.loaded = false);
         });
       } else {

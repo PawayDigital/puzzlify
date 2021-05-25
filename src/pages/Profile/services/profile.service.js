@@ -64,6 +64,27 @@ export default new (class ProfileService {
     }
   }
 
+  async deleteImage(id) {
+    try {
+      const options = {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+        res = await axios.delete(`${RUTA_API}/imagenes/${id}`, options);
+      if (res.status === 200) {
+        swal.fire("eliminada!", "tu imagen se ha eliminado!", "success");
+      }
+      return res.data;
+    } catch (err) {
+      swal.fire(
+        `Ha ocurrido un ${err.response.status} en tu intento de subir la imagen`,
+        err.response.statusText,
+        "error"
+      );
+    }
+  }
+
   async getUser() {
     try {
       const options = {

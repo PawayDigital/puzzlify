@@ -29,7 +29,7 @@
             </v-avatar>
             <span
               class="text-user mr-1 font-weight-bold display-name whitee--text"
-              >{{ infoUser.firstname }}</span
+              >{{ userInfo.firstname }}</span
             >
             <v-icon class="text-user" color="whitee">
               keyboard_arrow_down
@@ -106,34 +106,24 @@
 </template>
 
 <script>
-import RUTA_API from "@/env.js";
 export default {
+  props: {
+    userInfo: Object,
+    userFoto: String,
+  },
   data: () => ({
     expand: false,
     drawer: false,
     token: false,
-    infoUser: {},
-    image: "",
   }),
-  created() {
-    this.getUser();
-  },
   computed: {
     user() {
       return localStorage.getItem("token")
         ? (this.token = true)
         : (this.token = false);
     },
-    userFoto() {
-      if (this.infoUser.photos_user.image) {
-        return (this.image = `${RUTA_API}${this.infoUser.photos_user.image.url}`);
-      }
-    },
   },
   methods: {
-    getUser() {
-      this.infoUser = JSON.parse(localStorage.getItem("user"));
-    },
     signOff() {
       this.$router.push("/");
       localStorage.clear();

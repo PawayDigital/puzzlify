@@ -1,11 +1,22 @@
 <template>
   <div class="primary" style="width:100%; height:auto;">
+    <v-alert
+      v-if="viewAlert"
+      class="container mt-10"
+      outlined
+      color="textTitle"
+    >
+      <div class="title text-center d-flex align-center justify-center">
+        No hay Images de esta categoria
+      </div>
+    </v-alert>
+
     <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on, attrs }">
         <div class="grid mt-5">
           <v-card
             class="mx-auto text-center item mb-5"
-            v-for="item in imagesHome"
+            v-for="item in imgs"
             :key="item.id"
           >
             <img
@@ -69,12 +80,11 @@
 <script>
 import LayoutService from "@/pages/layout/services/layout.service.js";
 import ProfileService from "@/pages/Profile/services/profile.service.js";
-
 import RUTA_API from "@/env.js";
-import imagesLoaded from "imagesloaded";
-import masonry from "masonry-layout";
 import swal from "sweetalert2";
 import Modal from "./Modal.vue";
+import { mapActions, mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -84,17 +94,21 @@ export default {
       images: [],
       btnDelete: false,
       loaded: false,
+      alerta: null,
     };
   },
   components: {
     Modal,
   },
   computed: {
+    ...mapState(["imgs"]),
     urlImage() {
       return RUTA_API;
     },
-    imagesHome() {
-      return this.$route.path === "/profile" ? this.images : this.imagesGlobal;
+    viewAlert() {
+      return this.imgs.length === 0
+        ? (this.alerta = true)
+        : (this.alerta = false);
     },
     activeBtnDelete() {
       return this.$route.path === "/profile"
@@ -105,40 +119,34 @@ export default {
   mounted() {
     this.getImages();
     this.getImagesMe();
+
+    this.filterTags({ tag: "All", path: this.$route.path });
   },
   methods: {
+    ...mapActions(["filterTags"]),
     oneImage(id) {
       this.idImage = id;
     },
     getImagesMe() {
-      ProfileService.getImagesMe().then((res) => {
-        this.images = res;
-        let elem = document.querySelector(".grid");
-        imagesLoaded(elem, function() {
-          new masonry(elem, {
-            itemSelector: ".item",
-            columnWidth: 230,
-            gutter: 20,
-            isFitWidth: true,
+      if (this.$route.path === "/profile" && localStorage.getItem("token")) {
+        if (!localStorage.getItem("imagesUser")) {
+          ProfileService.getImagesMe().then((res) => {
+            this.images = res;
+            localStorage.setItem("imagesUser", JSON.stringify(res));
           });
-        });
-      });
+        }
+      }
     },
 
     getImages() {
-      LayoutService.getImages().then((res) => {
-        this.imagesGlobal = res;
-
-        let elem = document.querySelector(".grid");
-        imagesLoaded(elem, function() {
-          new masonry(elem, {
-            itemSelector: ".item",
-            columnWidth: 230,
-            gutter: 20,
-            isFitWidth: true,
+      if (this.$route.path === "/") {
+        if (!localStorage.getItem("images")) {
+          LayoutService.getImages().then((res) => {
+            this.imagesGlobal = res;
+            localStorage.setItem("images", JSON.stringify(res));
           });
-        });
-      });
+        }
+      }
     },
 
     getDelete(id) {

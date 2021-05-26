@@ -47,7 +47,7 @@
     </v-row>
     <v-row>
       <v-col cols="12" sm="8" md="12">
-        <v-btn type="submit" large block color="textTitle">
+        <v-btn type="submit" large block color="textTitle" :disabled="block">
           {{ btnName }}
           <v-progress-circular
             indeterminate
@@ -91,6 +91,7 @@ export default {
   props: {
     user: Object,
     loaded: Boolean,
+    block: Boolean,
   },
 };
 </script>

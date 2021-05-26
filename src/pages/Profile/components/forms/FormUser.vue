@@ -48,14 +48,14 @@ export default {
       });
     },
     update() {
-      this.loaded = true;
-
       let formData = new FormData();
 
       formData.append("files.image", this.info.url);
       formData.append("data", JSON.stringify({}));
 
       if (this.$refs.form.validate()) {
+        this.loaded = true;
+
         ProfileService.updateUser({
           username: this.info.username,
           email: this.info.email,
@@ -65,11 +65,13 @@ export default {
         }).then((res) => {
           if (this.info.url !== undefined) {
             ProfileService.updatePhoto(formData, this.id_photo).then((res) => {
+              this.$router.push("/profile");
               return (this.loaded = false);
             });
+          } else {
+            this.$router.push("/profile");
+            return (this.loaded = false);
           }
-          this.$router.push("/profile");
-          return (this.loaded = false);
         });
       } else {
         swal.fire(`Error`, "debes llenar los campos que se indicar", "error");

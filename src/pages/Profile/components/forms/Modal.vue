@@ -63,6 +63,10 @@
                   background-color="primary"
                   color="textImages"
                 ></v-select>
+                <v-alert v-if="alert" dense outlined type="error">
+                  La imagen y la categoria o categorias son
+                  <strong>requeridas</strong>
+                </v-alert>
               </v-col>
               <v-col cols="12" md="12" class="d-flex justify-md-end">
                 <v-btn color="error" @click="dialog = false" text class="mr-3"
@@ -70,7 +74,7 @@
                 >
                 <v-btn
                   type="submit"
-                  :disabled="!valid"
+                  :disabled="getDisabled || disabled || !valid"
                   color="textTitle"
                   class="btnPublicar"
                   >Publicar
@@ -101,6 +105,8 @@ export default {
     return {
       dialog: false,
       loaded: false,
+      disabled: null,
+      alert: false,
       image:
         "https://res.cloudinary.com/dlgvxohur/image/upload/v1618259197/utils/sb1tme4xc3oz5pmcfvhy.svg",
       items: [],
@@ -120,6 +126,15 @@ export default {
   created() {
     this.getTags();
   },
+  computed: {
+    getDisabled() {
+      if (this.url === null || this.categories.length === 0) {
+        return (this.disabled = true);
+      } else {
+        return (this.disabled = false);
+      }
+    },
+  },
   methods: {
     uploadImage() {
       document.getElementById("file").click();
@@ -134,36 +149,43 @@ export default {
       });
     },
     upload() {
-      this.loaded = true;
+      if (this.url === null || this.categories.length === 0) {
+        this.alert = true;
+      } else {
+        this.loaded = true;
+        this.disabled = true;
 
-      let tags = [],
-        user = JSON.parse(localStorage.getItem("user")).id,
-        formData = new FormData();
+        let tags = [],
+          user = JSON.parse(localStorage.getItem("user")).id,
+          formData = new FormData();
 
-      this.categories.forEach((el) => {
-        tags.push({ _id: el });
-      });
+        this.categories.forEach((el) => {
+          tags.push({ _id: el });
+        });
 
-      formData.append("files.url", this.url);
-      formData.append(
-        "data",
-        JSON.stringify({
-          title: this.name,
-          tags,
-          user,
-        })
-      );
+        formData.append("files.url", this.url);
+        formData.append(
+          "data",
+          JSON.stringify({
+            title: this.name,
+            tags,
+            user,
+          })
+        );
 
-      ProfileService.postImage(formData).then((res) => {
-        this.loaded = false;
-        if (res) {
-          this.image =
-            "https://res.cloudinary.com/dlgvxohur/image/upload/v1618259197/utils/sb1tme4xc3oz5pmcfvhy.svg";
-          this.name = "";
-          this.categories = 0;
-          this.dialog = false;
-        }
-      });
+        ProfileService.postImage(formData).then((res) => {
+          this.loaded = false;
+          this.disabled = false;
+          if (res) {
+            this.image =
+              "https://res.cloudinary.com/dlgvxohur/image/upload/v1618259197/utils/sb1tme4xc3oz5pmcfvhy.svg";
+            this.name = "";
+            this.categories = 0;
+            this.dialog = false;
+            this.$router.push("/");
+          }
+        });
+      }
     },
   },
 };

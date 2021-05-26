@@ -4,7 +4,7 @@ import "./registerServiceWorker";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
 import "@babel/polyfill";
-import "roboto-fontface/css/roboto/roboto-fontface.css";
+import store from "./store";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 
 Vue.config.productionTip = false;
@@ -12,5 +12,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   vuetify,
+  store,
   render: (h) => h(App),
 }).$mount("#app");

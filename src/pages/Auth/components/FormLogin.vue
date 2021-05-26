@@ -8,7 +8,7 @@
       >
     </span>
     <v-form @submit.prevent="login" ref="form" v-model="valid" lazy-validation>
-      <Input :user="user" :loaded="loaded" />
+      <Input :user="user" :loaded="loaded" :block="loaded" />
     </v-form>
   </v-col>
 </template>

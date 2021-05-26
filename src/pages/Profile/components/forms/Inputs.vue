@@ -75,7 +75,12 @@
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="12" class="d-flex justify-md-end">
-        <v-btn type="submit" color="textTitle" class="btnPublicar">
+        <v-btn
+          type="submit"
+          color="textTitle"
+          class="btnPublicar"
+          :disabled="loaded"
+        >
           Actualizar informacion
 
           <v-progress-circular

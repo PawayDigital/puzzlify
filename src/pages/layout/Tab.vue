@@ -2,7 +2,12 @@
   <v-card>
     <v-tabs v-model="tab" background-color="primary" centered icons-and-text>
       <v-tabs-slider></v-tabs-slider>
-      <v-tab href="#" v-for="item in tabs" :key="item.id">
+      <v-tab
+        @click="filterTags({ tag: item.name, path: '/' })"
+        href="#"
+        v-for="item in tabs"
+        :key="item.id"
+      >
         {{ item.name }}
         <v-icon>{{ item.icon }}</v-icon>
       </v-tab>
@@ -12,6 +17,8 @@
 
 <script>
 import LayoutService from "./services/layout.service.js";
+import { mapActions } from "vuex";
+
 export default {
   data() {
     return {
@@ -23,6 +30,7 @@ export default {
     this.getTags();
   },
   methods: {
+    ...mapActions(["filterTags"]),
     getTags() {
       LayoutService.getTags().then((res) => {
         for (const el of res) {

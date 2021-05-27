@@ -47,7 +47,7 @@ export default {
         this.id_photo = user.photos_user.id;
       });
     },
-    update() {
+    async update() {
       let formData = new FormData();
 
       formData.append("files.image", this.info.url);
@@ -56,23 +56,27 @@ export default {
       if (this.$refs.form.validate()) {
         this.loaded = true;
 
-        ProfileService.updateUser({
+        await ProfileService.updateUser({
           username: this.info.username,
           email: this.info.email,
           password: this.info.password,
           firstname: this.info.name,
           lastname: this.info.lastname,
         }).then((res) => {
-          if (this.info.url !== undefined) {
-            ProfileService.updatePhoto(formData, this.id_photo).then((res) => {
-              this.$router.push("/profile");
-              return (this.loaded = false);
-            });
-          } else {
-            this.$router.push("/profile");
-            return (this.loaded = false);
+          this.loaded = false;
+          if (this.info.url === undefined) {
+            return this.$router.push("/profile");
           }
         });
+
+        if (this.info.url !== undefined) {
+          await ProfileService.updatePhoto(formData, this.id_photo).then(
+            (res) => {
+              this.loaded = false;
+              return this.$router.push("/profile");
+            }
+          );
+        }
       } else {
         swal.fire(`Error`, "debes llenar los campos que se indicar", "error");
       }

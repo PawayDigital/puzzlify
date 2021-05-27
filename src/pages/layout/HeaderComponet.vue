@@ -125,8 +125,9 @@ export default {
   },
   methods: {
     signOff() {
-      this.$router.push("/");
-      localStorage.clear();
+      this.$router.push("/login");
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
     },
   },
 };

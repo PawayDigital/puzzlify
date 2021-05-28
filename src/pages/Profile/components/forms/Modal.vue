@@ -143,10 +143,15 @@ export default {
       this.image = URL.createObjectURL(e.target.files[0]);
       this.url = e.target.files[0];
     },
-    getTags() {
-      LayoutService.getTags().then((res) => {
-        this.items = res;
-      });
+    async getTags() {
+      if (!localStorage.getItem("tabsHome")) {
+        await LayoutService.getTags().then((res) => {
+          this.items = res;
+        });
+      } else {
+        this.items = JSON.parse(localStorage.getItem("tabsHome"));
+        this.items = this.items.splice(1);
+      }
     },
     upload() {
       if (this.url === null || this.categories.length === 0) {

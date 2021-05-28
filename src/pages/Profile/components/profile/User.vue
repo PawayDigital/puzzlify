@@ -79,12 +79,17 @@ export default {
     },
   },
   methods: {
-    getTags() {
-      let id_user = JSON.parse(localStorage.getItem("user")).id,
-        tags_array = [{ id: 1, name: "All" }];
-      ProfileService.getTags(id_user, tags_array).then((res) => {
-        this.tags = [...new Set(res)];
-      });
+    async getTags() {
+      if (!localStorage.getItem("tabsUser")) {
+        let id_user = JSON.parse(localStorage.getItem("user")).id,
+          tags_array = [{ id: 1, name: "All" }];
+        await ProfileService.getTags(id_user, tags_array).then((res) => {
+          this.tags = [...new Set(res)];
+        });
+        localStorage.setItem("tabsUser", JSON.stringify(this.tags));
+      } else {
+        this.tags = JSON.parse(localStorage.getItem("tabsUser"));
+      }
     },
   },
 };

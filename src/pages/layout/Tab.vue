@@ -31,12 +31,17 @@ export default {
   },
   methods: {
     ...mapActions(["filterTags"]),
-    getTags() {
-      LayoutService.getTags().then((res) => {
-        for (const el of res) {
-          this.tabs.push(el);
-        }
-      });
+    async getTags() {
+      if (!localStorage.getItem("tabsHome")) {
+        await LayoutService.getTags().then((res) => {
+          for (const el of res) {
+            this.tabs.push(el);
+          }
+        });
+        localStorage.setItem("tabsHome", JSON.stringify(this.tabs));
+      } else {
+        this.tabs = JSON.parse(localStorage.getItem("tabsHome"));
+      }
     },
   },
 };

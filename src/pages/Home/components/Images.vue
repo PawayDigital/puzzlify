@@ -165,6 +165,7 @@ export default {
             this.loaded = true;
             ProfileService.deleteImage(id).then((res) => {
               this.loaded = false;
+              this.$router.push("/");
             });
           }
         });

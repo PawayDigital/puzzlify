@@ -30,7 +30,7 @@
               :alt="item.url[0].name"
             />
 
-            <v-btn :color="item.tags[0].color" text>
+            <v-btn class="cursor--none" :color="item.tags[0].color" text>
               {{ item.tags[0].name }}
             </v-btn>
 
@@ -164,6 +164,15 @@ export default {
           if (result.isConfirmed) {
             this.loaded = true;
             ProfileService.deleteImage(id).then((res) => {
+              let images = JSON.parse(localStorage.getItem("images")),
+                imagesUser = JSON.parse(localStorage.getItem("imagesUser"));
+
+              let filtro1 = images.filter((img) => img.id !== id),
+                filtro2 = imagesUser.filter((img) => img.id !== id);
+
+              localStorage.setItem("images", JSON.stringify(filtro1));
+              localStorage.setItem("imagesUser", JSON.stringify(filtro2));
+
               this.loaded = false;
               this.$router.push("/");
             });

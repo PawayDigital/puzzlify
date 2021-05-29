@@ -21,8 +21,14 @@ export default new Vuetify({
         search: "#FDFDFD",
         upload: "#7AD6FE",
         categories: "#254B62",
+
+        music: "#220060",
+        fashion: "#A2793A",
         people: "#FDACAB",
         nature: "#88ECC9",
+        movies: "#FF5865",
+        tech: "#006184",
+        sports: "#00B1B8",
 
         accent: "#82B1FF",
         error: "#FF5252",

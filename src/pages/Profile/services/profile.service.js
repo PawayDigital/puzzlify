@@ -78,7 +78,7 @@ export default new (class ProfileService {
       return res.data;
     } catch (err) {
       swal.fire(
-        `Ha ocurrido un ${err.response.status} en tu intento de subir la imagen`,
+        `Ha ocurrido un ${err.response.status} en tu intento de eliminar la imagen`,
         err.response.statusText,
         "error"
       );

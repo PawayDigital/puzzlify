@@ -153,7 +153,7 @@ export default {
         this.items = this.items.splice(1);
       }
     },
-    upload() {
+    async upload() {
       if (this.url === null || this.categories.length === 0) {
         this.alert = true;
       } else {
@@ -178,7 +178,7 @@ export default {
           })
         );
 
-        ProfileService.postImage(formData).then((res) => {
+        await ProfileService.postImage(formData).then((res) => {
           this.loaded = false;
           this.disabled = false;
           if (res) {
@@ -187,9 +187,27 @@ export default {
             this.name = "";
             this.categories = 0;
             this.dialog = false;
-            this.$router.push("/");
+
+            ProfileService.getImagesMe().then((res) => {
+              this.images = res;
+              localStorage.setItem("imagesUser", JSON.stringify(res));
+            });
+            LayoutService.getImages().then((res) => {
+              this.imagesGlobal = res;
+              localStorage.setItem("images", JSON.stringify(res));
+            });
+            let id_user = JSON.parse(localStorage.getItem("user")).id;
+            let tags_array = [{ id: 1, name: "All" }];
+            ProfileService.getTags(id_user, tags_array).then((res) => {
+              localStorage.setItem(
+                "tabsUser",
+                JSON.stringify([...new Set(res)])
+              );
+            });
           }
         });
+
+        this.$router.push("/");
       }
     },
   },

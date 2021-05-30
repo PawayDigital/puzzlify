@@ -16,9 +16,9 @@ Sitio web donde cualquier persona puede publicar sus fotos para compartirlas con
 
 **Server:** Strapi, Mongo db
 
-## Api
+## Backend
 
-[Repositorio](https://github.com/PawayDigital/api-puzzlify)
+- [Repositorio](https://github.com/PawayDigital/api-puzzlify)
 
 ## Funciones
 
